@@ -19,7 +19,7 @@ namespace GetServiceName
             var username = args[1];
             var password = args[2];
 
-            var connectionString = new SqlConnectionStringBuilder
+            var csb = new SqlConnectionStringBuilder
             {
                 InitialCatalog = "master",
                 DataSource = server,
@@ -30,9 +30,11 @@ namespace GetServiceName
 
             try
             {
+                var connectionString = csb.ToString();
+                Console.WriteLine($"Connection string: {connectionString}");
                 Console.WriteLine($"Executing SQL: {commandText}");
 
-                using var connection = new SqlConnection(connectionString.ToString());
+                using var connection = new SqlConnection(connectionString);
                 connection.Open();
                 using var command = new SqlCommand(commandText, connection);
                 var result = command.ExecuteScalar();
